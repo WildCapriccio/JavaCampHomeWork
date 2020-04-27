@@ -1,0 +1,19 @@
+<configuration>
+
+	<!--数据库配置信息-->
+	<dataSource>
+		<property name="driverClass" value="com.mysql.jdbc.Driver"></property>
+		<property name="jdbcUrl" value="jdbc:mysql://localhost:3306/xiaoyudb?serverTimezone=UTC"></property>
+		<property name="username" value="root"></property>
+		<property name="password" value="1Q2w3e4r!"></property>
+	</dataSource>
+
+	<!--给实体类的全限定类名给别名-->
+<!--	<typeAliases>-->
+<!--		&lt;!&ndash;批量起别名：该包下所有的类的本身的类名：别名不区分大小写&ndash;&gt;-->
+<!--		<package name="com.lagou.pojo"/>-->
+<!--	</typeAliases>-->
+
+	<mapper resource="IUserMapper.xml"></mapper>
+
+</configuration>

@@ -25,4 +25,9 @@ public interface IUserMapper {
      * Delete 功能
      * */
     public void deleteUser(Integer id) throws Exception;
+
+    /*
+     * Update 功能
+     * */
+    public void updateUser(User user) throws Exception;
 }

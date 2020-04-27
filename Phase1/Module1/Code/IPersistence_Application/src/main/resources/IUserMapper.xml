@@ -32,4 +32,8 @@
 		delete from users where id = #{value}
 	</insert>
 
+	<!-- Update功能 -->
+	<update id="updateUser" parameterType="com.lagou.pojo.User">
+		update users set username = #{username} where id = #{id}
+	</update>
 </mapper>

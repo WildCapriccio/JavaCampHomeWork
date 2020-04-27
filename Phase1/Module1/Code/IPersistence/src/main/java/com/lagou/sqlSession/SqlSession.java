@@ -16,6 +16,9 @@ public interface SqlSession {
     //delete a specific record
     public int delete(String statementid, Object... params) throws Exception;
 
+    // update a specific record
+    public int update(String statementid, Object... params) throws Exception;
+
     //优化：为Mapper接口生成代理实现类
     public <T> T getMapper(Class<?> mapperClass);
 }

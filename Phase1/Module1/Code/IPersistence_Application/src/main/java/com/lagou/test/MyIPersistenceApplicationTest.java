@@ -69,4 +69,16 @@ public class MyIPersistenceApplicationTest {
         int id = 4;
         userMapper.deleteUser(id);
     }
+
+    /*
+     * Update 功能
+     * */
+    @Test
+    public void testUpdateUser() throws Exception {
+        User user = new User();
+        user.setId(3);
+        user.setUsername("Tom");
+
+        userMapper.updateUser(user);
+    }
 }

@@ -35,6 +35,10 @@ public class XMLMapperBuilder {
         // Element = <delete></delete> block
         List<Element> deleteNodes = rootElement.selectNodes("//delete");
         configureMappedStatementMap(deleteNodes, namespace);
+
+        // Element = <update></update> block
+        List<Element> updateNodes = rootElement.selectNodes("//update");
+        configureMappedStatementMap(updateNodes, namespace);
     }
 
     private void configureMappedStatementMap(List<Element> list, String namespace) {

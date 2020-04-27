@@ -37,6 +37,20 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public int insert(String statementid, Object... params) throws Exception {
+        return executeUpdate(statementid, params);
+    }
+
+    @Override
+    public int delete(String statementid, Object... params) throws Exception {
+        return executeUpdate(statementid, params);
+    }
+
+    @Override
+    public int update(String statementid, Object... params) throws Exception {
+        return executeUpdate(statementid, params);
+    }
+
+    private int executeUpdate(String statementid, Object... params) throws Exception {
         //将要去完成对simpleExecutor里的query方法的调用
         simpleExecutor simpleExecutor = new simpleExecutor();
         MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementid);
@@ -44,15 +58,8 @@ public class DefaultSqlSession implements SqlSession {
     }
 
     @Override
-    public int delete(String statementid, Object... params) throws Exception {
-        simpleExecutor simpleExecutor = new simpleExecutor();
-        MappedStatement mappedStatement = configuration.getMappedStatementMap().get(statementid);
-        return simpleExecutor.update(configuration, mappedStatement, params);
-    }
-
-    @Override
     public <T> T getMapper(Class<?> mapperClass) {
-        // 使用JDK动态代理来为Dao接口生成代理对象，并返回
+        // 使用JDK动态代理来为Mapper接口生成代理对象，并返回
 
         Object proxyInstance = Proxy.newProxyInstance(DefaultSqlSession.class.getClassLoader(), new Class[]{mapperClass}, new InvocationHandler() {
             @Override
@@ -89,6 +96,9 @@ public class DefaultSqlSession implements SqlSession {
                         break;
                     case "delete":
                         result = delete(statementId, args);
+                        break;
+                    case "update":
+                        result = update(statementId, args);
                         break;
                     case "select":
                         // 获取被调用方法的返回值类型
