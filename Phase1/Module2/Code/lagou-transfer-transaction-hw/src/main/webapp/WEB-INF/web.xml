@@ -5,10 +5,16 @@
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
 
+  <!--告诉ContextloaderListener我们是使用注解的方式启动IoC容器-->
+  <context-param>
+    <param-name>contextClass</param-name>
+    <param-value>org.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+  </context-param>
+
   <!--配置Spring ioc容器的配置文件供监听器使用，param-value是路径-->
   <context-param>
     <param-name>contextConfigLocation</param-name>
-    <param-value>classpath:applicationContext.xml</param-value>
+    <param-value>com.lagou.edu.config.SpringConfiguration</param-value>
   </context-param>
 
   <!--由于监听器是在Spring Web dependency里，所以要先去pom.xml引入Spring Web -->
