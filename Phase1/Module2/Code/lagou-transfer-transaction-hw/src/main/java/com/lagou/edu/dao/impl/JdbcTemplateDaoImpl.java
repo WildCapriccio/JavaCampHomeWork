@@ -21,9 +21,6 @@ public class JdbcTemplateDaoImpl implements AccountDao {
 
         String sql = "select * from account where cardNo=?";
 
-        /*
-        * queryForObject(sql语句，怎么封装返回结果，sql语句的参数对应？)
-        * */
         return jdbcTemplate.queryForObject(sql, new RowMapper<Account>() {
             @Override
             public Account mapRow(ResultSet resultSet, int i) throws SQLException {
@@ -41,7 +38,6 @@ public class JdbcTemplateDaoImpl implements AccountDao {
 
         String sql = "update account set money=? where cardNo=?";
 
-        // update(sql语句，sql语句参数对应？)
         return jdbcTemplate.update(sql, account.getMoney(), account.getCardNo());
     }
 }

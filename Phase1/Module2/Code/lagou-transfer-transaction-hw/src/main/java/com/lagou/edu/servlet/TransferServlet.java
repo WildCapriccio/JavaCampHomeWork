@@ -28,13 +28,6 @@ public class TransferServlet extends HttpServlet {
         transferService = (TransferService) webApplicationContext.getBean("transferService");
     }
 
-    /*
-    * 注意： 由于servlet是由外部容器，这里是tomcat，来管理的，
-    * 所以这里无法写成：
-    * private TransferService transferService
-    * 还是只能getBean。
-    * */
-
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         doPost(req,resp);

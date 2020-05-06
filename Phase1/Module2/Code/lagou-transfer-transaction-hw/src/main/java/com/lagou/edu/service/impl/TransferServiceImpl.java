@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class TransferServiceImpl implements TransferService {
 
-    // @Autowired 按照类型注入 ,如果按照类型无法唯一锁定对象，可以结合@Qualifier指定具体的id
     @Autowired
     @Qualifier("accountDao")
     private AccountDao accountDao;
@@ -27,7 +26,7 @@ public class TransferServiceImpl implements TransferService {
             to.setMoney(to.getMoney()+money);
 
             accountDao.updateAccountByCardNo(to);
-             int c = 1/0;  // 这是制造异常的代码
+            // int c = 1/0;  // 这是制造异常的代码
             accountDao.updateAccountByCardNo(from);
 
     }
