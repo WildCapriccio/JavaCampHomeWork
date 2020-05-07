@@ -1,5 +1,6 @@
 package com.lagou.edu.factory;
 
+import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyComponent;
 import com.lagou.edu.annotation.MyService;
 import org.dom4j.Document;
@@ -14,12 +15,10 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.io.InputStream;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author 应癫
@@ -35,6 +34,8 @@ public class BeanFactory {
 
     private static Map<String,Object> map = new HashMap<>();  // 存储对象 id:object
 
+    // Store parentClassName:Set of autowiredIds
+    private static Map<String, Set<String>> autowiredRelationship = new HashMap<>();
 
     static {
         // 任务一：读取解析xml，通过反射技术实例化对象并且存储待用（map集合）
@@ -99,7 +100,8 @@ public class BeanFactory {
 
             Reflections reflections = new Reflections(new ConfigurationBuilder()
                                             .setUrls(ClasspathHelper.forPackage("com.lagou.edu"))
-                                            .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
+                                            .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner(),
+                                                    new FieldAnnotationsScanner()));
 
             // Scan @MyService(id)
             Set<Class<?>> myServiceTypes = reflections.getTypesAnnotatedWith(MyService.class);
@@ -116,6 +118,31 @@ public class BeanFactory {
                 MyComponent annotation = myComponentType.getAnnotation(MyComponent.class);
                 putAnnotatedObjIntoMap(annotation.value(), myComponentType);
             }
+
+            // Scan @MyAutowired(id)
+            Set<Field> myAutowiredFields = reflections.getFieldsAnnotatedWith(MyAutowired.class);
+            System.out.println("# of @MyAutowired = " + myAutowiredFields.size());
+            for (Field field : myAutowiredFields) {
+                String parentClassName = field.getDeclaringClass().toString();
+
+                MyAutowired annotation = field.getAnnotation(MyAutowired.class);
+                String autowiredId = annotation.value();
+                if (!autowiredRelationship.containsKey(parentClassName)) {
+                    autowiredRelationship.put(parentClassName, new HashSet<String>());
+                }
+                autowiredRelationship.get(parentClassName).add(autowiredId);
+            }
+
+            for (String key : map.keySet()) {
+                System.out.println("map:  " + key + " ---> " + map.get(key));
+            }
+
+            for (String key : autowiredRelationship.keySet()) {
+                System.out.println("autoRelation:  " + key + " ---> " + autowiredRelationship.get(key));
+            }
+
+            // Connect Beans in map with autowiredRelationship
+
 
         } catch (DocumentException e) {
             e.printStackTrace();
