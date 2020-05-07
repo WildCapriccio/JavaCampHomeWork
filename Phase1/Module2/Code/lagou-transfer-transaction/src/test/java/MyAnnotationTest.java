@@ -4,6 +4,8 @@ import com.lagou.edu.service.TransferService;
 import com.lagou.edu.utils.MyUtil;
 import org.junit.Test;
 
+import java.lang.reflect.Field;
+
 public class MyAnnotationTest {
 
     @Test
@@ -16,7 +18,8 @@ public class MyAnnotationTest {
     }
 
     @Test
-    public void testMyAutowiredAnnotation() {
-        MyUtil mu = (MyUtil) BeanFactory.getBean("myUtil");
+    public void testMyAutowiredAnnotation() throws Exception {
+        TransferService service = (TransferService) BeanFactory.getBean("myTransferService");
+        service.transfer("34","999", 200);
     }
 }

@@ -14,6 +14,8 @@ public class MyDaoImpl implements AccountDao {
 
     @Override
     public Account queryAccountByCardNo(String cardNo) throws Exception {
+        System.out.println("Test my autowired annotation successful! ");
+        myUtil.print();
         return null;
     }
 

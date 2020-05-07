@@ -13,6 +13,7 @@ public class MyServiceImpl implements TransferService {
 
     @Override
     public void transfer(String fromCardNo, String toCardNo, int money) throws Exception {
-
+        myDaoImpl.queryAccountByCardNo("123");
     }
+
 }

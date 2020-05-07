@@ -134,17 +134,39 @@ public class BeanFactory {
 
                     String filedName = field.getName();
                     System.out.println("Current field name = " + filedName);
+
+                    Field[] fields = parentObj.getClass().getDeclaredFields();
+                    for (Field f : fields) {
+                        System.out.println("parentobj declared fied: " + f.getName());
+                        if (f.getName().equals(filedName)) {
+                            System.out.println("before set field " + filedName + ", f = " + f);
+
+                            f.setAccessible(true);
+                            f.set(parentObj, autoObj);
+
+                            System.out.println("after set field " + filedName + ", f = " + f);
+                        }
+                    }
+
+                    map.put(parentId, parentObj);
+
+//                    declaredField.setAccessible(true);
+//                    declaredField.set(filedName, autoObj);
+//
+//                    System.out.println("After set, declaredField = " + declaredField);
+//                    System.out.println("After set, parentobj = " + parentObj.getClass().getField(filedName));
+
                 }
 
             }
 
-            for (String key : map.keySet()) {
-                System.out.println("map:  " + key + " ---> " + map.get(key));
-            }
-
-            for (String key : class2IdMap.keySet()) {
-                System.out.println("class2IdMap:  " + key + " ---> " + class2IdMap.get(key));
-            }
+//            for (String key : map.keySet()) {
+//                System.out.println("map:  " + key + " ---> " + map.get(key));
+//            }
+//
+//            for (String key : class2IdMap.keySet()) {
+//                System.out.println("class2IdMap:  " + key + " ---> " + class2IdMap.get(key));
+//            }
 
 
         } catch (DocumentException e) {
