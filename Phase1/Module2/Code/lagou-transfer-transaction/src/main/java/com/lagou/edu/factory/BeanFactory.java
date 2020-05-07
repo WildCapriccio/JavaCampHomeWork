@@ -43,7 +43,7 @@ public class BeanFactory {
 
             // Scan @MyService(id)
             Set<Class<?>> myServiceTypes = reflections.getTypesAnnotatedWith(MyService.class);
-            System.out.println("# of @MyService = " + myServiceTypes.size());
+
             for (Class<?> myServiceType : myServiceTypes) {
                 MyService annotation = myServiceType.getAnnotation(MyService.class);
                 putAnnotatedObjIntoMaps(annotation.value(), myServiceType);
@@ -51,7 +51,7 @@ public class BeanFactory {
 
             // Scan @MyComponent(id)
             Set<Class<?>> myComponentTypes = reflections.getTypesAnnotatedWith(MyComponent.class);
-            System.out.println("# of @MyComponent = " + myComponentTypes.size());
+
             for (Class<?> myComponentType : myComponentTypes) {
                 MyComponent annotation = myComponentType.getAnnotation(MyComponent.class);
                 putAnnotatedObjIntoMaps(annotation.value(), myComponentType);
@@ -59,10 +59,10 @@ public class BeanFactory {
 
             // Scan @MyAutowired(id)
             Set<Field> myAutowiredFields = reflections.getFieldsAnnotatedWith(MyAutowired.class);
-            System.out.println("# of @MyAutowired relationship = " + myAutowiredFields.size());
+
             for (Field field : myAutowiredFields) {
                 String parentClassName = field.getDeclaringClass().getName();
-                System.out.println("Current parent class = " + parentClassName);
+
                 if (class2IdMap.containsKey(parentClassName)) {
                     String parentId = class2IdMap.get(parentClassName);
                     Object parentObj = map.get(parentId);
@@ -70,17 +70,12 @@ public class BeanFactory {
                     MyAutowired annotation = field.getAnnotation(MyAutowired.class);
                     String autoId = annotation.value();
 
-                    System.out.println("Current autoId = " + autoId);
-
                     String filedName = field.getName();
-                    System.out.println("Current field name = " + filedName);
 
                     Field[] fields = parentObj.getClass().getDeclaredFields();
                     for (Field f : fields) {
 
                         if (f.getName().equals(filedName)) {
-                            System.out.println("before set field " + filedName
-                                    + ", f getname = " + f.getDeclaringClass() + "===" + f.getType().getName());
 
                             /*
                             * Check ambiguities -- it is NOT allowed that
@@ -102,8 +97,6 @@ public class BeanFactory {
 
                             f.setAccessible(true);
                             f.set(parentObj, autoObj);
-
-                            System.out.println("after set field " + filedName + ", f = " + f);
                         }
                     }
 
@@ -115,7 +108,7 @@ public class BeanFactory {
             // Generate Proxy object
             // Scan @MyTransactional
             Set<Class<?>> myTransactionalTypes = reflections.getTypesAnnotatedWith(MyTransactional.class);
-            System.out.println("# of @MyTransactional = " + myTransactionalTypes.size());
+
             for (Class<?> myTransactionalType : myTransactionalTypes) {
                 MyTransactional annotation = myTransactionalType.getAnnotation(MyTransactional.class);
                 boolean useJDK = annotation.useJDK();

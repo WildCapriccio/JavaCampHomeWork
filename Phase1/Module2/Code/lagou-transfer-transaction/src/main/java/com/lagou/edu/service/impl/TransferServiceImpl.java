@@ -25,7 +25,7 @@ public class TransferServiceImpl implements TransferService {
             to.setMoney(to.getMoney()+money);
 
             accountDao.updateAccountByCardNo(to);
-            int c = 1/0;  // 这是制造异常的代码
+//            int c = 1/0;  // 这是制造异常的代码
             accountDao.updateAccountByCardNo(from);
 
     }
