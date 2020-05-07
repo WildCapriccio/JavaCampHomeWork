@@ -1,9 +1,17 @@
 package com.lagou.edu.factory;
 
+import com.lagou.edu.annotation.MyComponent;
+import com.lagou.edu.annotation.MyService;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.reflections.Reflections;
+import org.reflections.scanners.FieldAnnotationsScanner;
+import org.reflections.scanners.SubTypesScanner;
+import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
+import org.reflections.util.ConfigurationBuilder;
 
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +19,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author 应癫
@@ -24,7 +33,8 @@ public class BeanFactory {
      * 任务二：对外提供获取实例对象的接口（根据id获取）
      */
 
-    private static Map<String,Object> map = new HashMap<>();  // 存储对象
+    private static Map<String,Object> map = new HashMap<>();  // 存储对象 id:object
+
 
     static {
         // 任务一：读取解析xml，通过反射技术实例化对象并且存储待用（map集合）
@@ -87,6 +97,26 @@ public class BeanFactory {
                 map.put(parentId, parentObject);
             }
 
+            Reflections reflections = new Reflections(new ConfigurationBuilder()
+                                            .setUrls(ClasspathHelper.forPackage("com.lagou.edu"))
+                                            .setScanners(new TypeAnnotationsScanner(), new SubTypesScanner()));
+
+            // Scan @MyService(id)
+            Set<Class<?>> myServiceTypes = reflections.getTypesAnnotatedWith(MyService.class);
+            System.out.println("# of @MyService = " + myServiceTypes.size());
+            for (Class<?> myServiceType : myServiceTypes) {
+                MyService annotation = myServiceType.getAnnotation(MyService.class);
+                putAnnotatedObjIntoMap(annotation.value(), myServiceType);
+            }
+
+            // Scan @MyComponent(id)
+            Set<Class<?>> myComponentTypes = reflections.getTypesAnnotatedWith(MyComponent.class);
+            System.out.println("# of @MyComponent = " + myComponentTypes.size());
+            for (Class<?> myComponentType : myComponentTypes) {
+                MyComponent annotation = myComponentType.getAnnotation(MyComponent.class);
+                putAnnotatedObjIntoMap(annotation.value(), myComponentType);
+            }
+
         } catch (DocumentException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -106,4 +136,11 @@ public class BeanFactory {
         return map.get(id);
     }
 
+    private static void putAnnotatedObjIntoMap(String id, Class<?> myType) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        String clazz = myType.getName();
+        Class<?> aClass = Class.forName(clazz);
+        Object o = aClass.newInstance();
+
+        map.put(id, o);
+    }
 }
