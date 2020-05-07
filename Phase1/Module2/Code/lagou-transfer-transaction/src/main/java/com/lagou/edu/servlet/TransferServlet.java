@@ -1,10 +1,10 @@
 package com.lagou.edu.servlet;
 
+import com.lagou.edu.factory.BeanFactory;
+import com.lagou.edu.factory.ProxyFactory;
 import com.lagou.edu.utils.JsonUtils;
 import com.lagou.edu.pojo.Result;
 import com.lagou.edu.service.TransferService;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,14 +19,21 @@ import java.io.IOException;
 @WebServlet(name="transferServlet",urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    private TransferService transferService = null;
+    // 首先，直接从BeanFactory中获取ProxyFactory的对象
+    private ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getBean("proxyFactory");
 
-    @Override
-    public void init() throws ServletException {
-        WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
-        // 直接绕过proxy去拿transferService，方便删掉proxy class、TransactionManager class、ConnectionUtils class这条workflow
-        transferService = (TransferService) webApplicationContext.getBean("transferService");
-    }
+    // 1. 实例化service层对象
+    //private TransferService transferService = new TransferServiceImpl();
+    //private TransferService transferService = (TransferService) BeanFactory.getBean("transferService");
+    // 从工厂获取 已经被增强了的 委托对象 的代理对象 （该代理对象已经拥有事务增强/切面逻辑）
+    private TransferService transferService = (TransferService) proxyFactory.getJDKProxy(BeanFactory.getBean("transferService"));
+
+    /*
+    * 注意： 由于servlet是由外部容器，这里是tomcat，来管理的，
+    * 所以这里无法写成：
+    * private TransferService transferService
+    * 还是只能getBean。
+    * */
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
