@@ -1,19 +1,18 @@
 package com.lagou.edu.utils;
 
+import com.lagou.edu.annotation.MyAutowired;
+import com.lagou.edu.annotation.MyComponent;
+
 import java.sql.SQLException;
 
 /*
 * 事务管理器类：负责手动的对事务进行开启、提交、回滚。
 * */
+@MyComponent(value = "transactionManager")
 public class TransactionManager {
 
-    // 由于使用了beans.xml来管理对象生成和对象之间的依赖关系，故这里不再需要将TransactionManager做成单例。
-
-    // 用beans.xml来管理class之间的依赖关系
+    @MyAutowired
     private ConnectionUtils connectionUtils;
-    public void setConnectionUtils(ConnectionUtils connectionUtils) {
-        this.connectionUtils = connectionUtils;
-    }
 
     // 开启手动事务控制
     public void beginTransaction() throws SQLException {

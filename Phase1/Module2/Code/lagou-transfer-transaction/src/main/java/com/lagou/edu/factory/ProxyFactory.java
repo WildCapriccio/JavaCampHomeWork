@@ -1,5 +1,7 @@
 package com.lagou.edu.factory;
 
+import com.lagou.edu.annotation.MyAutowired;
+import com.lagou.edu.annotation.MyComponent;
 import com.lagou.edu.pojo.Account;
 import com.lagou.edu.utils.TransactionManager;
 
@@ -7,15 +9,11 @@ import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 
+@MyComponent(value = "proxyFactory")
 public class ProxyFactory {
 
-    // 不再单例化，因为beans.xml会通过反射机制生成ProxyFactory对象，其背后会用到ProxyFactory的无参constructor
-
-    // 用beans.xml来管理class之间的依赖关系
+    @MyAutowired
     private TransactionManager transactionManager;
-    public void setTransactionManager(TransactionManager transactionManager) {
-        this.transactionManager = transactionManager;
-    }
 
     public Object getJDKProxy(Object obj) {
         return Proxy.newProxyInstance(obj.getClass().getClassLoader(),

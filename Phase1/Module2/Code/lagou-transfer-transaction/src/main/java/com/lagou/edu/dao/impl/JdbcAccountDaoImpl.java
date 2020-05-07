@@ -1,5 +1,7 @@
 package com.lagou.edu.dao.impl;
 
+import com.lagou.edu.annotation.MyAutowired;
+import com.lagou.edu.annotation.MyComponent;
 import com.lagou.edu.pojo.Account;
 import com.lagou.edu.dao.AccountDao;
 import com.lagou.edu.utils.ConnectionUtils;
@@ -9,14 +11,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-
+@MyComponent(value = "accountDao")
 public class JdbcAccountDaoImpl implements AccountDao {
 
-    // 用beans.xml来管理class之间的依赖关系
+    @MyAutowired
     private ConnectionUtils connectionUtils;
-    public void setConnectionUtils(ConnectionUtils connectionUtils) {
-        this.connectionUtils = connectionUtils;
-    }
 
     @Override
     public Account queryAccountByCardNo(String cardNo) throws Exception {

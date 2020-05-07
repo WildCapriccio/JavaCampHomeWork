@@ -9,7 +9,7 @@ import com.lagou.edu.utils.MyUtil;
 @MyComponent(value = "myDao")
 public class MyDaoImpl implements AccountDao {
 
-    @MyAutowired(value = "myUtil")
+    @MyAutowired
     private MyUtil myUtil;
 
     @Override

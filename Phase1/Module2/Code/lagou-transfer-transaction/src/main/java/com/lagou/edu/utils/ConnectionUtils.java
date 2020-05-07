@@ -1,11 +1,12 @@
 package com.lagou.edu.utils;
 
+import com.lagou.edu.annotation.MyComponent;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 
+@MyComponent(value = "connectionUtils")
 public class ConnectionUtils {
-
-    // 由于使用了beans.xml来管理对象生成和对象之间的依赖关系，故这里不再需要将ConnectionUtils做成单例。
 
     // To store the connection of current thread
     private ThreadLocal<Connection> threadLocal = new ThreadLocal<>();
