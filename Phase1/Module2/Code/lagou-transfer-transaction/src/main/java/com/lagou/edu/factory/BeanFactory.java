@@ -34,8 +34,7 @@ public class BeanFactory {
 
     private static Map<String,Object> map = new HashMap<>();  // 存储对象 id:object
 
-    // Store parentClassName:Set of autowiredIds
-    private static Map<String, Set<String>> autowiredRelationship = new HashMap<>();
+    private static Map<String, String> class2IdMap = new HashMap<>(); // className:id
 
     static {
         // 任务一：读取解析xml，通过反射技术实例化对象并且存储待用（map集合）
@@ -108,7 +107,7 @@ public class BeanFactory {
             System.out.println("# of @MyService = " + myServiceTypes.size());
             for (Class<?> myServiceType : myServiceTypes) {
                 MyService annotation = myServiceType.getAnnotation(MyService.class);
-                putAnnotatedObjIntoMap(annotation.value(), myServiceType);
+                putAnnotatedObjIntoMaps(annotation.value(), myServiceType);
             }
 
             // Scan @MyComponent(id)
@@ -116,32 +115,36 @@ public class BeanFactory {
             System.out.println("# of @MyComponent = " + myComponentTypes.size());
             for (Class<?> myComponentType : myComponentTypes) {
                 MyComponent annotation = myComponentType.getAnnotation(MyComponent.class);
-                putAnnotatedObjIntoMap(annotation.value(), myComponentType);
+                putAnnotatedObjIntoMaps(annotation.value(), myComponentType);
             }
 
             // Scan @MyAutowired(id)
             Set<Field> myAutowiredFields = reflections.getFieldsAnnotatedWith(MyAutowired.class);
-            System.out.println("# of @MyAutowired = " + myAutowiredFields.size());
+            System.out.println("# of @MyAutowired relationship = " + myAutowiredFields.size());
             for (Field field : myAutowiredFields) {
-                String parentClassName = field.getDeclaringClass().toString();
+                String parentClassName = field.getDeclaringClass().getName();
+                System.out.println("Current parent class = " + parentClassName);
+                if (class2IdMap.containsKey(parentClassName)) {
+                    String parentId = class2IdMap.get(parentClassName);
+                    Object parentObj = map.get(parentId);
 
-                MyAutowired annotation = field.getAnnotation(MyAutowired.class);
-                String autowiredId = annotation.value();
-                if (!autowiredRelationship.containsKey(parentClassName)) {
-                    autowiredRelationship.put(parentClassName, new HashSet<String>());
+                    MyAutowired annotation = field.getAnnotation(MyAutowired.class);
+                    String autoId = annotation.value();
+                    Object autoObj = map.get(autoId);
+
+                    String filedName = field.getName();
+                    System.out.println("Current field name = " + filedName);
                 }
-                autowiredRelationship.get(parentClassName).add(autowiredId);
+
             }
 
             for (String key : map.keySet()) {
                 System.out.println("map:  " + key + " ---> " + map.get(key));
             }
 
-            for (String key : autowiredRelationship.keySet()) {
-                System.out.println("autoRelation:  " + key + " ---> " + autowiredRelationship.get(key));
+            for (String key : class2IdMap.keySet()) {
+                System.out.println("class2IdMap:  " + key + " ---> " + class2IdMap.get(key));
             }
-
-            // Connect Beans in map with autowiredRelationship
 
 
         } catch (DocumentException e) {
@@ -163,11 +166,12 @@ public class BeanFactory {
         return map.get(id);
     }
 
-    private static void putAnnotatedObjIntoMap(String id, Class<?> myType) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+    private static void putAnnotatedObjIntoMaps(String id, Class<?> myType) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
         String clazz = myType.getName();
         Class<?> aClass = Class.forName(clazz);
         Object o = aClass.newInstance();
 
         map.put(id, o);
+        class2IdMap.put(clazz, id);
     }
 }
