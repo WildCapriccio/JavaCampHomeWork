@@ -4,15 +4,10 @@ import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyService;
 import com.lagou.edu.annotation.MyTransactional;
 import com.lagou.edu.dao.AccountDao;
-import com.lagou.edu.factory.BeanFactory;
 import com.lagou.edu.pojo.Account;
 import com.lagou.edu.service.TransferService;
-import com.lagou.edu.utils.ConnectionUtils;
-import com.lagou.edu.utils.TransactionManager;
 
-/**
- * @author 应癫
- */
+
 @MyService(value = "transferService")
 @MyTransactional
 public class TransferServiceImpl implements TransferService {

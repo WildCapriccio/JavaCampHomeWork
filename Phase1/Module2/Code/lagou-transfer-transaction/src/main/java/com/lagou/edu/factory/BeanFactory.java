@@ -4,10 +4,6 @@ import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyComponent;
 import com.lagou.edu.annotation.MyService;
 import com.lagou.edu.annotation.MyTransactional;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.Element;
-import org.dom4j.io.SAXReader;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -15,7 +11,6 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -29,7 +24,7 @@ import java.util.*;
 public class BeanFactory {
 
     /**
-     * 任务一：读取解析xml，通过反射技术实例化对象并且存储待用（map集合）
+     * 任务一：通过Scan各种Annotation，把 id:Object 存入map，把 className:id 存入 class2IdMap
      * 任务二：对外提供获取实例对象的接口（根据id获取）
      */
 
@@ -133,13 +128,7 @@ public class BeanFactory {
                 map.put(id, proxyObj);
             }
 
-//            for (String key : map.keySet()) {
-//                System.out.println("map:  " + key + " ---> " + map.get(key));
-//            }
-//
-//            for (String key : class2IdMap.keySet()) {
-//                System.out.println("class2IdMap:  " + key + " ---> " + class2IdMap.get(key));
-//            }
+        // printMaps();
 
         } catch ( ClassNotFoundException | IllegalAccessException
                 | InstantiationException | InvocationTargetException e) {
@@ -176,5 +165,15 @@ public class BeanFactory {
 
         map.put(id, o);
         class2IdMap.put(clazz, id);
+    }
+
+    private static void printMaps() {
+        for (String key : map.keySet()) {
+            System.out.println("map:  " + key + " ---> " + map.get(key));
+        }
+        System.out.println();
+        for (String key : class2IdMap.keySet()) {
+            System.out.println("class2IdMap:  " + key + " ---> " + class2IdMap.get(key));
+        }
     }
 }

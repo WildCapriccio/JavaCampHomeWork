@@ -2,7 +2,6 @@ package com.lagou.edu.factory;
 
 import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyComponent;
-import com.lagou.edu.pojo.Account;
 import com.lagou.edu.utils.TransactionManager;
 
 import java.lang.reflect.InvocationHandler;
