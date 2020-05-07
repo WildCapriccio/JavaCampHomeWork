@@ -19,14 +19,7 @@ import java.io.IOException;
 @WebServlet(name="transferServlet",urlPatterns = "/transferServlet")
 public class TransferServlet extends HttpServlet {
 
-    // 首先，直接从BeanFactory中获取ProxyFactory的对象
-    private ProxyFactory proxyFactory = (ProxyFactory) BeanFactory.getBean("proxyFactory");
-
-    // 1. 实例化service层对象
-    //private TransferService transferService = new TransferServiceImpl();
-    //private TransferService transferService = (TransferService) BeanFactory.getBean("transferService");
-    // 从工厂获取 已经被增强了的 委托对象 的代理对象 （该代理对象已经拥有事务增强/切面逻辑）
-    private TransferService transferService = (TransferService) proxyFactory.getJDKProxy(BeanFactory.getBean("transferService"));
+    private TransferService transferService = (TransferService) BeanFactory.getBean("transferService");
 
     /*
     * 注意： 由于servlet是由外部容器，这里是tomcat，来管理的，

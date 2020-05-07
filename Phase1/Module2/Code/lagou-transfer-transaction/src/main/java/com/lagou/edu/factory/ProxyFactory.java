@@ -46,4 +46,9 @@ public class ProxyFactory {
                     }
                 });
     }
+
+    public Object getCGLIBProxy(Object obj) {
+        // TODO
+        return obj;
+    }
 }

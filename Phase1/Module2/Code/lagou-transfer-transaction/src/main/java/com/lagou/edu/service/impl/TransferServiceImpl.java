@@ -2,6 +2,7 @@ package com.lagou.edu.service.impl;
 
 import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyService;
+import com.lagou.edu.annotation.MyTransactional;
 import com.lagou.edu.dao.AccountDao;
 import com.lagou.edu.factory.BeanFactory;
 import com.lagou.edu.pojo.Account;
@@ -13,6 +14,7 @@ import com.lagou.edu.utils.TransactionManager;
  * @author 应癫
  */
 @MyService(value = "transferService")
+@MyTransactional
 public class TransferServiceImpl implements TransferService {
 
     @MyAutowired(value = "accountDao")
@@ -28,7 +30,7 @@ public class TransferServiceImpl implements TransferService {
             to.setMoney(to.getMoney()+money);
 
             accountDao.updateAccountByCardNo(to);
-//            int c = 1/0;  // 这是制造异常的代码
+            int c = 1/0;  // 这是制造异常的代码
             accountDao.updateAccountByCardNo(from);
 
     }

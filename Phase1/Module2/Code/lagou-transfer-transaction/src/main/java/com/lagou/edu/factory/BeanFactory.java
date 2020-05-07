@@ -3,6 +3,7 @@ package com.lagou.edu.factory;
 import com.lagou.edu.annotation.MyAutowired;
 import com.lagou.edu.annotation.MyComponent;
 import com.lagou.edu.annotation.MyService;
+import com.lagou.edu.annotation.MyTransactional;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -116,6 +117,22 @@ public class BeanFactory {
 
             }
 
+            // Generate Proxy object
+            // Scan @MyTransactional
+            Set<Class<?>> myTransactionalTypes = reflections.getTypesAnnotatedWith(MyTransactional.class);
+            System.out.println("# of @MyTransactional = " + myTransactionalTypes.size());
+            for (Class<?> myTransactionalType : myTransactionalTypes) {
+                MyTransactional annotation = myTransactionalType.getAnnotation(MyTransactional.class);
+                boolean useJDK = annotation.useJDK();
+                String clazz = myTransactionalType.getName(); // com.lagou.edu.service.impl.MyServiceImpl
+                String id = class2IdMap.get(clazz);
+                Object originObj = map.get(id);
+
+                Object proxyObj = generateProxyObj(originObj, useJDK);
+
+                map.put(id, proxyObj);
+            }
+
 //            for (String key : map.keySet()) {
 //                System.out.println("map:  " + key + " ---> " + map.get(key));
 //            }
@@ -125,7 +142,7 @@ public class BeanFactory {
 //            }
 
         } catch ( ClassNotFoundException | IllegalAccessException
-                | InstantiationException e) {
+                | InstantiationException | InvocationTargetException e) {
             e.printStackTrace();
         }
 
@@ -134,6 +151,22 @@ public class BeanFactory {
     // 任务二：对外提供获取实例对象的接口（根据id获取）
     public static Object getBean(String id) {
         return map.get(id);
+    }
+
+    private static Object generateProxyObj(Object origin, boolean useJDK) throws InvocationTargetException, IllegalAccessException {
+        String proxyName = useJDK ? "JDK" : "CGLIB";
+        Object proxyFactory = map.get("proxyFactory");
+        Object result = origin;
+
+        Method[] methods = proxyFactory.getClass().getMethods();
+        for (int i = 0; i < methods.length; i++) {
+            Method method = methods[i];
+            if (method.getName().equalsIgnoreCase("get" + proxyName + "Proxy")) {
+               return method.invoke(proxyFactory, origin);
+            }
+        }
+        // throw new IllegalArgumentException("ProxyFactory不能正常生产代理对象！");
+        return origin; // return origin 方便测试
     }
 
     private static void putAnnotatedObjIntoMaps(String id, Class<?> myType) throws ClassNotFoundException, IllegalAccessException, InstantiationException {

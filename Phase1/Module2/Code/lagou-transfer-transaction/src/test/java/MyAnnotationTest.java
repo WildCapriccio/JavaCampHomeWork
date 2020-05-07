@@ -21,5 +21,13 @@ public class MyAnnotationTest {
     public void testMyAutowiredAnnotation() throws Exception {
         TransferService service = (TransferService) BeanFactory.getBean("myTransferService");
         service.transfer("34","999", 200);
+        System.out.println(service);
+    }
+
+    @Test
+    public void testMyTransactionalAnnotation() throws Exception {
+        TransferService service = (TransferService) BeanFactory.getBean("myTransferService");
+        service.transfer("34","999", 200);
+        System.out.println(service);
     }
 }
