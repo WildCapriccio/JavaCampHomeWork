@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath*:applicationContext.xml"})
+@ContextConfiguration(locations = {"classpath*:applicationContext-dao.xml"})
 public class ResumeDaoTest {
 
     @Autowired
