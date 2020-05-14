@@ -11,6 +11,25 @@
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:applicationContext*.xml</param-value>
   </context-param>
+
+  <!--springmvc提供的针对post请求的编码过滤器，并且指明编码方式用UTF-8-->
+  <filter>
+    <filter-name>encoding</filter-name>
+    <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+    <init-param>
+      <param-name>encoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+  </filter>
+
+
+  <filter-mapping>
+    <filter-name>encoding</filter-name>
+    <!-- SpringMVC 会拦截吸收所有 url   -->
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
