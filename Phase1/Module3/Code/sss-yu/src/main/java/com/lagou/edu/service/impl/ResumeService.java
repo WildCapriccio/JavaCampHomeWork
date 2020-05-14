@@ -17,7 +17,29 @@ public class ResumeService implements IResumeService {
     private IResumeDao resumeDao;
 
     @Override
+    public void addNewResume(Resume resume){
+        // input doesn't have id
+        resumeDao.save(resume);
+    }
+
+    @Override
+    public Resume findResumeById(Long id) throws Exception {
+        return resumeDao.findById(id).get();
+    }
+
+    @Override
     public List<Resume> queryAllResumes() throws Exception {
         return resumeDao.findAll();
+    }
+
+    @Override
+    public void deleteResumeById(Long id) throws Exception {
+        resumeDao.deleteById(id);
+    }
+
+    @Override
+    public void updateResume(Resume resume) throws Exception {
+        // input has id
+        resumeDao.save(resume);
     }
 }
