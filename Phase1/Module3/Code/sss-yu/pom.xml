@@ -181,17 +181,6 @@
 
     <plugins>
 
-      <!-- 为了使用tomcat，引入tomcat插件，指定port和path -->
-      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat7-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <port>8080</port>
-          <path>/</path>
-        </configuration>
-      </plugin>
-
       <!-- 指定maven的编译级别 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

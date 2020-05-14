@@ -18,4 +18,10 @@
 	<!-- 配置SpringMVC注解驱动，自动注册合适的组件 HandlerMapping 和 HandlerAdapter -->
 	<mvc:annotation-driven/>
 
+	<!--配置springmvc的视图解析器-->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix" value=".jsp"/>
+	</bean>
+
 </beans>

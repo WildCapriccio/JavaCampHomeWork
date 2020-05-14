@@ -5,7 +5,7 @@ import com.lagou.edu.service.IResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
 
@@ -17,8 +17,15 @@ public class ResumeController {
     private IResumeService resumeService;
 
     @RequestMapping("/queryAll")
-    @ResponseBody
-    public List<Resume> queryAll() throws Exception {
-        return resumeService.queryAllResumes();
+    public ModelAndView queryAll() throws Exception {
+        List<Resume> resumeList = resumeService.queryAllResumes();
+
+        ModelAndView modelAndView = new ModelAndView();
+        String result = resumeList.get(0).toString();
+        modelAndView.addObject("myList", resumeList);
+
+        modelAndView.setViewName("resumeList");
+
+        return modelAndView;
     }
 }
