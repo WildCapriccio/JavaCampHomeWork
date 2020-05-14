@@ -1,11 +1,11 @@
 package com.lagou.edu.controller;
 
+import com.lagou.edu.pojo.Account;
 import com.lagou.edu.pojo.Resume;
 import com.lagou.edu.service.IResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -56,7 +56,9 @@ public class ResumeController {
     }
 
     @RequestMapping("/queryAll")
-    public ModelAndView queryAll() throws Exception {
+    public ModelAndView queryAll(Account account) throws Exception {
+        System.out.println("从前端拿到的account是： " + account.toString());
+
         List<Resume> resumeList = resumeService.queryAllResumes();
 
         ModelAndView modelAndView = new ModelAndView();
