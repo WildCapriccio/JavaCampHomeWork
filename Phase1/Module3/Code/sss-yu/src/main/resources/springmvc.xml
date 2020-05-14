@@ -12,8 +12,9 @@
        http://www.springframework.org/schema/mvc/spring-mvc.xsd
 ">
 
-	<!-- 扫描controller pkg -->
+	<!-- 扫描controller 和 interceptors pkg -->
 	<context:component-scan base-package="com.lagou.edu.controller"/>
+	<context:component-scan base-package="com.lagou.edu.interceptors"/>
 
 	<!-- 配置SpringMVC注解驱动，自动注册合适的组件 HandlerMapping 和 HandlerAdapter -->
 	<mvc:annotation-driven/>
@@ -23,5 +24,20 @@
 		<property name="prefix" value="/WEB-INF/jsp/"/>
 		<property name="suffix" value=".jsp"/>
 	</bean>
+
+	<!-- 注册自定义Interceptor	-->
+	<mvc:interceptors>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/resume/**"/>
+			<bean class="com.lagou.edu.interceptors.ResumeInterceptor"/>
+		</mvc:interceptor>
+
+		<mvc:interceptor>
+			<mvc:mapping path="/list*"/>
+			<bean class="com.lagou.edu.interceptors.LoginInterceptor"/>
+		</mvc:interceptor>
+
+	</mvc:interceptors>
 
 </beans>

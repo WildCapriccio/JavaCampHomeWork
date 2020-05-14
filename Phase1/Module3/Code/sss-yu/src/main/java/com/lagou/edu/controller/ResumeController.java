@@ -1,6 +1,5 @@
 package com.lagou.edu.controller;
 
-import com.lagou.edu.pojo.Account;
 import com.lagou.edu.pojo.Resume;
 import com.lagou.edu.service.IResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,8 +55,7 @@ public class ResumeController {
     }
 
     @RequestMapping("/queryAll")
-    public ModelAndView queryAll(Account account) throws Exception {
-        System.out.println("从前端拿到的account是： " + account.toString());
+    public ModelAndView queryAll() throws Exception {
 
         List<Resume> resumeList = resumeService.queryAllResumes();
 

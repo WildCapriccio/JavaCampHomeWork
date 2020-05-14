@@ -4,8 +4,6 @@ import com.lagou.edu.pojo.Account;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
 
 @Controller
 @RequestMapping("/")
@@ -24,8 +22,15 @@ public class LoginController {
     }
 
     @RequestMapping(value = "list")
-    public String toResumeListPage(Account account, RedirectAttributes redirectAttributes) {
-        redirectAttributes.addFlashAttribute("account", account);
+    public String toResumeListPage(Account account) {
+
         return "redirect:resume/queryAll";
+    }
+
+    @RequestMapping(value = "login.failed")
+    public ModelAndView showLoginFailPage() {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("error");
+        return modelAndView;
     }
 }
