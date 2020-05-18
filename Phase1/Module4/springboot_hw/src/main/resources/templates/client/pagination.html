@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org" th:fragment="pagination">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<!-- Pagination -->
+<div class="am-g am-g-fixed blog-fixed index-page">
+    <div class="am-u-md-8 am-u-sm-12">
+        <div th:if="${articles.totalPages gt 0}">
+            <ul style="margin:0px;" class="am-pagination">
+
+                <li class="am-pagination-default">
+                    <a th:href="@{/findAll(page=1)}">
+                        首页
+                    </a>
+                </li>
+
+                <li class="am-pagination-default" th:if="${articles.hasPrevious()}">
+                    <a th:href="@{/findAll(page=${articles.number})}">
+                        上一页
+                    </a>
+                </li>
+
+                <div th:each="i : ${#numbers.sequence(1, articles.totalPages, 1)}" th:remove="tag">
+                    <span th:if="${i eq articles.getNumber() + 1}" th:remove="tag">
+                        <li class="am-pagination-select"><span th:text="${i}"></span></li>
+                    </span>
+                    <span th:unless="${i eq articles.getNumber() + 1}" th:remove="tag">
+                        <li class="am-pagination-default"><a th:href="@{/findAll(page=${i})}" th:text="${i}"></a></li>
+                    </span>
+                </div>
+
+                <li class="am-pagination-default" th:if="${articles.hasNext()}">
+                    <a th:href="@{/findAll(page=${articles.number+2})}">
+                        下一页
+                    </a>
+                </li>
+
+                <li class="am-pagination-default">
+                    <a th:href="@{/findAll(page=${articles.totalPages})}">
+                        尾页
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</div>
+</body>
+</html>
